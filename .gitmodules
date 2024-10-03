@@ -1,0 +1,3 @@
+[submodule "audioseal"]
+	path = audioseal
+	url = https://github.com/facebookresearch/audioseal.git
