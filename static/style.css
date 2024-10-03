@@ -1,0 +1,274 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #001f3f;
+    color: #ffffff;
+    padding-top: 60px;
+    padding-bottom: 50px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00264d;
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.logo img {
+    height: 140px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links a,
+#downloadLink a {
+    color: #ffd700;
+    text-decoration: none;
+    padding: 0 15px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+#downloadLink a:hover {
+    color: #FF4136;
+}
+
+header.hero-section {
+    background-color: #001f3f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px 2rem;
+    margin-top: 80px;
+    margin-bottom: 1rem;
+}
+
+header.hero-section h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #ffd700;
+}
+
+header.hero-section p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+section.section-padding {
+    padding: 1rem;
+    background-color: #011a30;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 1rem auto;
+}
+
+form label {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #FF4136;
+}
+
+form input[type="text"],
+form input[type="file"],
+form button {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 2px solid #ffd700;
+    background-color: transparent;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 1rem;
+}
+
+form input[type="file"]:hover,
+form button:hover {
+    background-color: #FF4136;
+    color: #ffffff;
+    border-color: #FF4136;
+}
+
+form input[type="file"]:focus,
+form button:focus,
+form input[type="text"]:focus {
+    outline: none;
+    border-color: #ffffff;
+}
+
+@media screen and (max-width: 768px) {
+    form {
+        width: 90%;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .nav-links a {
+        padding: 10px 0;
+    }
+
+    header.hero-section {
+        padding: 10px 1rem;
+        margin-top: 60px;
+    }
+}
+
+#loadingIndicator p {
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
+
+#spectrogramDisplay img,
+#downloadLink img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+#watermark small {
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.spectrogram-container {
+    position: relative;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.spectrogram-label {
+    position: absolute;
+    width: 100%;
+    top: -25px;
+    left: 0;
+    color: #ffd700;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.spectrogram-container:before {
+    content: 'Before';
+    display: block;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd700;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.spectrogram-container.after:before {
+    content: 'After';
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffd700;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #001F3F; /* Dark Blue */
+}
+
+.file-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.file-actions button {
+    flex: 1;
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #FF4136; /* Red */
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-actions button:hover {
+    background-color: #FF851B; /* Orange */
+}
+
+.downloads {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.download-link {
+    color: #FFDC00; /* Yellow */
+    text-decoration: none;
+    margin: 5px 0;
+    transition: color 0.3s;
+}
+
+.download-link:hover {
+    color: #FFD700; /* Gold */
+}
+
+.spectrogram img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #FFDC00; /* Yellow */
+    padding: 10px;
+    background-color: white;
+}

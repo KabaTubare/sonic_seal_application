@@ -1,0 +1,17 @@
+Flask[async]
+torch
+torchaudio
+cryptography
+numpy
+omegaconf
+julius
+soundfile
+python-magic
+matplotlib
+Pillow
+google-cloud-storage
+google-cloud-pubsub
+gunicorn
+aiofiles
+aiohttp
+

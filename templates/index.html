@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SonicSealTech - Secure Your Audio</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .image-box, .download-section {
+            flex: 1 1 calc(48% - 20px);
+            text-align: center;
+            padding: 10px;
+            background-color: #022140;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .image-box img, .image-box audio {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .download-section a {
+            display: block;
+            color: #ffd700;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .download-section a:hover {
+            color: #FF851B;
+        }
+        .value-prop {
+            margin: 20px 0;
+            color: #ffd700;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .file-input {
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #FF4136;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FF851B;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="/static/sonicseal_logo.png" alt="SonicSealTech Logo" style="width: 125px; height: auto;">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <header class="hero-section" id="home">
+        <h1>SonicSeal: AI-Powered Audio Asset Protection</h1>
+        <p>Explore SonicSealTech's leading-edge audio watermarking and cryptographic authentication technology. We secure your audio assets against unauthorized use with invisible, robust watermarking.</p>
+    </header>
+    <main>
+        <section id="watermark" class="section-padding">
+            <h2>Watermark Your Audio File</h2>
+            <form id="watermarkForm" action="/watermark" method="post" enctype="multipart/form-data">
+                <div id="fileInputsContainer">
+                    <div class="file-input">
+                        <label for="audio1">Select your audio file:</label>
+                        <input type="file" id="audio1" name="audio1" required>
+                        <label for="unique_message1">Enter your unique message (up to 16 characters):</label>
+                        <input type="text" id="unique_message1" name="unique_message1" placeholder="Unique message" maxlength="16" required>
+                    </div>
+                </div>
+                <button type="button" id="addFileInput">Add Another File</button>
+                <button type="submit">Upload and Watermark</button>
+            </form>
+            <div id="loadingIndicator" style="display:none;">Loading...</div>
+            <div id="resultsContainer" class="container"></div>
+        </section>
+        <section id="detect" class="section-padding">
+            <h2>Detect Watermark</h2>
+            <form id="detectForm" action="/detect" method="post" enctype="multipart/form-data">
+                <label for="audioDetect">Select audio file for detection:</label>
+                <input type="file" id="audioDetect" name="audio" required>
+                <label for="original_message">Enter your original message for verification (optional):</label>
+                <input type="text" id="original_message" name="original_message" placeholder="Original message">
+                <button type="submit">Upload and Detect</button>
+            </form>
+            <div id="detectionLoadingIndicator" style="display:none;">Detecting...</div>
+            <div id="detectionResult" style="margin-top: 20px;"></div>
+            <div id="spectrogramDisplay" style="margin-top: 20px;"></div>
+        </section>
+        <section id="value-props" class="section-padding">
+            <h2>Why Choose SonicSealTech?</h2>
+            <p class="value-prop">SonicSealTech provides unmatched security for your audio assets through advanced cryptography and invisible watermarking technology, ensuring seamless integration and robust protection against unauthorized use.</p>
+        </section>
+        <section id="about" class="section-padding">
+            <h2>About SonicSealTech</h2>
+            <p>SonicSealTech is at the vanguard of the digital rights management industry, providing advanced audio watermarking and encryption solutions that are designed to protect the intellectual property of creators in the digital age. Our technology ensures that audio content is safeguarded through sophisticated, unobtrusive watermarking techniques that maintain the integrity of the original audio while embedding traceable data that can be detected even through layers of transformation and distortion. Our solutions are built to withstand various attacks and ensure that content creators can assert their rights and receive appropriate compensation for the use of their work.</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 SonicSealTech. All rights reserved.</p>
+    </footer>
+    <script>
+        $(document).ready(function() {
+            let fileInputCounter = 1;
+
+            $('#addFileInput').click(function() {
+                fileInputCounter++;
+                const fileInputHtml = `
+                    <div class="file-input">
+                        <label for="audio${fileInputCounter}">Select your audio file:</label>
+                        <input type="file" id="audio${fileInputCounter}" name="audio${fileInputCounter}" required>
+                        <label for="unique_message${fileInputCounter}">Enter your unique message (up to 16 characters):</label>
+                        <input type="text" id="unique_message${fileInputCounter}" name="unique_message${fileInputCounter}" placeholder="Unique message" maxlength="16" required>
+                    </div>
+                `;
+                $('#fileInputsContainer').append(fileInputHtml);
+            });
+
+            // Handle watermark form submission
+            $('#watermarkForm').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $('#loadingIndicator').show();
+                $.ajax({
+                    url: '/watermark',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $('#loadingIndicator').hide();
+                        $('#resultsContainer').empty();
+                        response.forEach(res => updateUIWithWatermarkResponse(res));
+                    },
+                    error: function() {
+                        $('#loadingIndicator').hide();
+                        alert('Error in watermarking.');
+                    }
+                });
+            });
+
+            // Handle detect form submission
+            $('#detectForm').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $('#detectionLoadingIndicator').show();
+                $.ajax({
+                    url: '/detect',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $('#detectionLoadingIndicator').hide();
+                        var matchText = response.match === 'Yes' ? 'Yes' : 'No';
+                        $('#detectionResult').html('<strong>Detection Result:</strong> ' + response.detection_result +
+                                                   '<br><strong>Confidence:</strong> ' + response.confidence.toFixed(2) +
+                                                   '<br><strong>Detected Message:</strong> ' + response.detected_message +
+                                                   '<br><strong>Match:</strong> ' + matchText);
+                        $('#spectrogramDisplay').html('<img src="' + response.spectrogram_image_url + '" alt="Detected Spectrogram" style="max-width:100%; height:auto;">');
+                    },
+                    error: function() {
+                        $('#detectionLoadingIndicator').hide();
+                        alert('Error in detection.');
+                    }
+                });
+            });
+        });
+
+        // Update UI with watermark response
+        function updateUIWithWatermarkResponse(response) {
+            const resultHtml = `
+                <div class="download-section">
+                    <a href="${response.download_url}" download="watermarked_audio.wav">Download Watermarked Audio</a>
+                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(response.hex_message)}" download="HexMessage.txt">Download Hex Message</a>
+                    <a href="data:text/plain;charset=utf-8,${encodeURIComponent(response.signature_hex)}" download="Signature Hex">Download Signature Hex</a>
+                </div>
+                <div class="image-box">
+                    <h3>Spectrogram Before Watermarking</h3>
+                    <img src="data:image/png;base64,${response.pre_watermark_spectrogram}" alt="Spectrogram Before Watermarking">
+                </div>
+                <div class="image-box">
+                    <h3>MFCC Before Watermarking</h3>
+                    <img src="data:image/png;base64,${response.pre_watermark_mfcc}" alt="MFCC Before Watermarking">
+                </div>
+                <div class="image-box">
+                    <h3>Spectrogram After Watermarking</h3>
+                    <img src="data:image/png;base64,${response.post_watermark_spectrogram}" alt="Spectrogram After Watermarking">
+                </div>
+                <div class="image-box">
+                    <h3>MFCC After Watermarking</h3>
+                    <img src="data:image/png;base64,${response.post_watermark_mfcc}" alt="MFCC After Watermarking">
+                </div>
+            `;
+            $('#resultsContainer').append(resultHtml);
+        }
+    </script>
+</body>
+</html>
